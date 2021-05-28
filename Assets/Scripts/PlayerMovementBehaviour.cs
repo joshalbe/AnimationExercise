@@ -16,12 +16,21 @@ public class PlayerMovementBehaviour : MonoBehaviour
     private bool _canMove = true;
     private Collider _collider;
     private float _distanceToGround;
+    private float _moveDirection;
 
     public Vector3 Velocity
     {
         get
         {
             return _velocity;
+        }
+    }
+
+    public float MoveDirection
+    {
+        get
+        {
+            return _moveDirection;
         }
     }
 
@@ -55,8 +64,9 @@ public class PlayerMovementBehaviour : MonoBehaviour
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, _distanceToGround + 0.01f);
 
         //Update position based on player input
-        _velocity.x = Input.GetAxis("Horizontal");
-        _rigidbody.MovePosition(transform.position + _velocity * _moveSpeed * Time.deltaTime);
+        _moveDirection = Input.GetAxis("Horizontal");
+        _velocity.x =  _moveDirection * _moveSpeed;
+        _rigidbody.MovePosition(transform.position + _velocity * Time.deltaTime);
 
         //If the player pressed the jump button and is on the gorund, add a force upwards
         if (Input.GetButtonDown("Jump") && _isGrounded)
